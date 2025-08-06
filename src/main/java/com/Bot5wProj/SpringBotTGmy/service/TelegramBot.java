@@ -2,6 +2,8 @@ package com.Bot5wProj.SpringBotTGmy.service;
 
 
 import com.Bot5wProj.SpringBotTGmy.config.BotConfig;
+import com.Bot5wProj.SpringBotTGmy.controller.BotController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -12,31 +14,17 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class TelegramBot extends TelegramLongPollingBot {
 
     private final BotConfig botConfig;
+    private final BotController botController;
 
-    public TelegramBot(BotConfig botConfig) {
+    @Autowired
+    public TelegramBot(BotConfig botConfig, BotController botController) {
         this.botConfig = botConfig;
+        this.botController = botController;
     }
 
     @Override
     public void onUpdateReceived(Update update) {
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            String messageText = update.getMessage().getText();
-            long chatId = update.getMessage().getChatId();
-
-            switch (messageText) {
-                case "/start":
-                    sendMessage(chatId, "Привет! Я бот для мониторинга цен.");
-                    break;
-                case "/help":
-                    sendMessage(chatId, "Список команд: /start, /track, /list");
-                    break;
-                case "/track":
-                    sendMessage(chatId, "Отправьте ссылку на товар с Wildberries.");
-                    break;
-                default:
-                    sendMessage(chatId, "Неизвестная команда. Используйте /help");
-            }
-        }
+        botController.handleUpdate(update);
     }
 
     @Override
