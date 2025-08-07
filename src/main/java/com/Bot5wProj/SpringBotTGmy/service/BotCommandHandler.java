@@ -1,20 +1,28 @@
 package com.Bot5wProj.SpringBotTGmy.service;
 
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BotCommandHandler {
 
     private final MessageSender messageSender;
+    private final UserService userService;
 
-    public BotCommandHandler(MessageSender messageSender) {
+    public BotCommandHandler(MessageSender messageSender, UserService userService) {
          this.messageSender = messageSender;
+         this.userService = userService;
     }
 
-    public void handleCommand(Long chatId, String command) {
+    public void handleCommand(Message message) {
+        Long chatId = message.getChatId();
+        String command = message.getText();
+        String username = message.getFrom().getUserName();
         switch (command){
             case "/start" : {
-                messageSender.sendMessage(chatId, "Привет! Я бот для мониторинга цен.");
+                userService.registerUser(chatId, username);
+                messageSender.sendMessage(chatId, "Привет! Я бот для мониторинга цен." +
+                        " Ты успешно зарегистрирован.");
                 break;
             }
             case "/help":{

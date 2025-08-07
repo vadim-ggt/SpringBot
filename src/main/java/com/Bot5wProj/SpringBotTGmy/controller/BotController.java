@@ -16,11 +16,8 @@ public class BotController {
 
 
     public void handleUpdate(Update update) {
-        if(update.hasMessage() && update.getMessage().hasText()){
-            String messageText = update.getMessage().getText();
-            Long chatId = update.getMessage().getChatId();
-
-            commandHandler.handleCommand(chatId, messageText);
+        if (update.hasMessage() && update.getMessage().hasText()) {
+            commandHandler.handleCommand(update.getMessage());
         }
     }
 }
