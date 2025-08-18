@@ -1,13 +1,7 @@
 package com.Bot5wProj.SpringBotTGmy.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
@@ -17,17 +11,15 @@ import lombok.NoArgsConstructor;
 public class Product {
 
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // автоинкремент
 
+    private String article; // артикул WB
     private String url;
-
     private String title;
-
     private Double price;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-
 }
